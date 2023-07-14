@@ -23,14 +23,13 @@ const Home: React.FC = () => {
   const fetchImages = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(
-        `https://api.unsplash.com/photos?per_page=5&page=${page}&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_API_KEY}`
-      );
+     const response = await fetch(
+  `https://api.unsplash.com/photos?per_page=5&page=${page}&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_API_KEY}`
+);
 
       if (!response.ok) {
         throw new Error('Failed to fetch images');
       }
-
       const data = await response.json();
       const newImages = data.map((image: any) => ({
         id: image.id,
@@ -40,7 +39,6 @@ const Home: React.FC = () => {
         blurDataURL: image.urls?.thumb || '',
         liked: false,
       }));
-
       setImages((prevImages) => [...prevImages, ...newImages]);
       setIsLoading(false);
     } catch (error) {
@@ -51,7 +49,6 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   useEffect(() => {
@@ -61,10 +58,9 @@ const Home: React.FC = () => {
   }, [images]);
 
   useEffect(() => {
-    setPage(1);
-    setImages([]);
-    fetchImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setPage(1); // Reset page to 1 when category or search query changes
+    setImages([]); // Clear existing images
+    fetchImages(); // Fetch images based on the new category or search query
   }, [selectedCategory, searchQuery]);
 
   useEffect(() => {
@@ -77,7 +73,7 @@ const Home: React.FC = () => {
     const observer = new IntersectionObserver((entries) => {
       const target = entries[0];
       if (target.isIntersecting && !isLoading) {
-        observer.unobserve(target.target);
+        observer.unobserve(target.target); // Stop observing the target element
         setPage((prevPage) => prevPage + 1);
       }
     }, options);
@@ -91,7 +87,6 @@ const Home: React.FC = () => {
         observer.unobserve(loadingRef.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import NextLink from "next/link";
 import { Flex, Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
