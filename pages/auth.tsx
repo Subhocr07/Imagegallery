@@ -169,9 +169,9 @@ const Auth: NextPage = ({ providers }: any) => {
 
           <Divider />
 
-          <ProvidersButtons providers={providers} />
+          {/* <ProvidersButtons providers={providers} /> */}
 
-          <Divider word="Or" />
+          {/* <Divider word="Or" /> */}
 
           <Formik
             initialValues={{}} // { email: "", password: "" }
