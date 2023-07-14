@@ -27,7 +27,7 @@ const router=useRouter();
       </Button>
       {renderProfileButton && (
         <Button onClick={handleProfileClick}>
-          <NextLink href="/profile">Profile</NextLink>
+          <NextLink href="/profile">Image Gallery</NextLink>
         </Button>
       )}
       {renderAuthButton && (

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
+import withAuth from './api/auth/WithAuth';
 
 interface ImageData {
   id: string;
@@ -20,30 +21,34 @@ const Home: React.FC = () => {
   const loadingRef = useRef<HTMLDivElement>(null);
 
   const fetchImages = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(
-        `https://api.unsplash.com/photos?per_page=5&page=${page}&client_id=OZpldDuCQN6lrESALytz4tkD_PbolTwyZygLdpDosFE`
-      );
-      if (!response.ok) {
-        throw new Error('Failed to fetch images');
-      }
-      const data = await response.json();
-      const newImages = data.map((image: any) => ({
-        id: image.id,
-        title: image.alt_description || '',
-        category: image.categories && image.categories[0]?.title || 'Uncategorized',
-        imageUrl: image.urls?.regular || '',
-        blurDataURL: image.urls?.thumb || '',
-        liked: false,
-      }));
-      setImages((prevImages) => [...prevImages, ...newImages]);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
+  try {
+    setIsLoading(true);
+    const response = await fetch(
+      `https://api.unsplash.com/photos?per_page=5&page=${page}&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_API_KEY}`
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch images');
     }
-  };
+
+    const data = await response.json();
+    const newImages = data.map((image: any) => ({
+      id: image.id,
+      title: image.alt_description || '',
+      category: image.categories && image.categories[0]?.title || 'Uncategorized',
+      imageUrl: image.urls?.regular || '',
+      blurDataURL: image.urls?.thumb || '',
+      liked: false,
+    }));
+
+    setImages((prevImages) => [...prevImages, ...newImages]);
+    setIsLoading(false);
+  } catch (error) {
+    console.error(error);
+    setIsLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchImages();
@@ -228,4 +233,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default withAuth(Home);
